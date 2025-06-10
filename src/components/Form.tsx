@@ -1,4 +1,4 @@
-import { Button, Container, Grid, TextField } from '@mui/material';
+import { Box, Button, Container, Grid, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
 
 interface IFormInput {
@@ -13,17 +13,14 @@ function Form() {
     formState: { errors },
     watch,
   } = useForm<IFormInput>({
-    // defaultValues: {
-    //   firstSeqValue: '',
-    //   secondSeqValue: '',
-    // },
+    defaultValues: {
+      firstSeqValue: '',
+      secondSeqValue: '',
+    },
     mode: 'onChange',
   });
 
   const firstSeqFieldValue = watch('firstSeqValue');
-  const secondSeqFieldValue = watch('secondSeqValue');
-  console.log('1', firstSeqFieldValue);
-  console.log('2', secondSeqFieldValue);
 
   const onSubmit = (data: IFormInput) => {
     console.log('Form data:', data);
@@ -45,7 +42,7 @@ function Form() {
 
   return (
     <Container sx={{ my: '10vh' }}>
-      <form {...handleSubmit(onSubmit)}>
+      <Box component="form" onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={2} sx={{ justifyContent: 'center' }}>
           <Grid size={{ xs: 12, md: 8 }}>
             <TextField
@@ -98,7 +95,7 @@ function Form() {
             </Button>
           </Grid>
         </Grid>
-      </form>
+      </Box>
     </Container>
   );
 }
