@@ -81,6 +81,10 @@ function Form() {
     N: '#80BFFF',
   };
 
+  const compareSeqValues = (char1: string, char2: string): string => {
+    return char1 === char2 ? '' : '#FF0000';
+  };
+
   return (
     <Container sx={{ my: '10vh' }}>
       <Box component="form" onSubmit={handleSubmit(onSubmit)}>
@@ -147,7 +151,7 @@ function Form() {
                 {submittedData.firstSeqValue.split('').map((char, index) => (
                   <Typography
                     component="span"
-                    key={index}
+                    key={`str1-${index}`}
                     sx={{
                       backgroundColor: colorTable[char] || '#000000',
                       fontSize: 'inherit',
@@ -166,7 +170,27 @@ function Form() {
                 component="p"
                 sx={{ fontSize: '1.1em', lineHeight: 'inherit' }}
               >
-                {submittedData.secondSeqValue}
+                {Array.from({
+                  length: submittedData.secondSeqValue.length,
+                }).map((_, index) => {
+                  const char1 = submittedData.firstSeqValue[index] || '';
+                  const char2 = submittedData.secondSeqValue[index] || '';
+
+                  return (
+                    <Typography
+                      component="span"
+                      key={`str2-${index}`}
+                      sx={{
+                        backgroundColor: `${compareSeqValues(char1, char2)}`,
+                        fontSize: 'inherit',
+                        letterSpacing: 'inherit',
+                        display: 'inline-block',
+                      }}
+                    >
+                      {char2}
+                    </Typography>
+                  );
+                })}
               </Typography>
             </Grid>
           </Grid>
