@@ -1,41 +1,16 @@
 import {
   Alert,
   Box,
+  Container,
   Grid,
   Snackbar,
   Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import type { IFormInput } from '../types';
+import type { Acid, IFormInput } from '../types';
 import { useState } from 'react';
-
-interface IColorTable {
-  [key: string]: string;
-}
-
-const colorTable: IColorTable = {
-  C: '#FFEA00',
-  A: '#67E4A6',
-  I: '#67E4A6',
-  L: '#67E4A6',
-  M: '#67E4A6',
-  F: '#67E4A6',
-  W: '#67E4A6',
-  Y: '#67E4A6',
-  V: '#67E4A6',
-  P: '#67E4A6',
-  G: '#C4C4C4',
-  D: '#FC9CAC',
-  E: '#FC9CAC',
-  K: '#BB99FF',
-  R: '#BB99FF',
-  S: '#80BFFF',
-  T: '#80BFFF',
-  H: '#80BFFF',
-  Q: '#80BFFF',
-  N: '#80BFFF',
-};
+import { AminoAcidColors } from '../data';
 
 function splitSeqIntoChunks(seq: string, size: number) {
   const result = [];
@@ -51,18 +26,37 @@ function AlignmentVisualization({
   submittedData: IFormInput | null;
 }) {
   const theme = useTheme();
-  const isMoreThanMdScreenSize = useMediaQuery(theme.breakpoints.up('md'));
+  const isMoreThanSmScreenSize = useMediaQuery(theme.breakpoints.up('sm'));
   const [isOpenSnackbar, setIsOpenSnackbar] = useState<boolean>(false);
 
   if (!submittedData?.firstSeqValue || !submittedData?.secondSeqValue) {
-    return;
+    return (
+      <Container>
+        <Box component="div">
+          <Grid container spacing={2} sx={{ justifyContent: 'center' }}>
+            <Grid
+              sx={{ p: 2, border: '1px dashed grey' }}
+              size={{ xs: 12, md: 8 }}
+            >
+              <Typography
+                variant="overline"
+                component="p"
+                sx={{
+                  fontSize: '1.1em',
+                  lineHeight: 'inherit',
+                  textAlign: 'center',
+                }}
+              >
+                No data
+              </Typography>
+            </Grid>
+          </Grid>
+        </Box>
+      </Container>
+    );
   }
 
-  const compareSeqValues = (char1: string, char2: string): string => {
-    return char1 === char2 ? 'transparent' : colorTable[char2];
-  };
-
-  const groupSize = isMoreThanMdScreenSize ? 30 : 12;
+  const groupSize = isMoreThanSmScreenSize ? 30 : 12;
 
   const firstSeqChunks = splitSeqIntoChunks(
     submittedData.firstSeqValue,
@@ -105,81 +99,93 @@ function AlignmentVisualization({
   };
 
   return (
-    <Box component="div" sx={{ m: '0 5vw', p: 2, border: '1px dashed grey' }}>
-      <Grid
-        spacing={2}
-        sx={{
-          fontSize: '1.1em',
-          lineHeight: 'inherit',
-          textAlign: 'center',
-          '::selection': { backgroundColor: '#FF0000', color: '#FFFFFF' },
-        }}
-        onMouseUp={handleSelect}
-      >
-        {groupsOfChunksOfBothSequences.map((group, groupIndex) => (
-          <Box component={'div'} key={`group-${groupIndex}`} sx={{ mb: '1vh' }}>
-            <Typography
-              variant="overline"
-              component="p"
+    <Container>
+      <Box component="div">
+        <Grid container spacing={2} sx={{ justifyContent: 'center' }}>
+          <Grid
+            sx={{ p: 2, border: '1px dashed grey' }}
+            size={{ xs: 12, md: 8 }}
+          >
+            <Grid
               sx={{
                 fontSize: '1.1em',
                 lineHeight: 'inherit',
                 textAlign: 'center',
+                '::selection': { backgroundColor: '#FF0000', color: '#FFFFFF' },
               }}
+              onMouseUp={handleSelect}
             >
-              {group.firstSeq.split('').map((char, charIndex) => (
-                <span
-                  key={`seq1-${groupIndex}-${charIndex}`}
-                  style={{
-                    backgroundColor: colorTable[char],
-                    fontSize: 'inherit',
-                    letterSpacing: 'inherit',
-                    lineHeight: 'inherit',
-                  }}
+              {groupsOfChunksOfBothSequences.map((group, groupIndex) => (
+                <Box
+                  component={'div'}
+                  key={`group-${groupIndex}`}
+                  sx={{ mb: '1vh' }}
                 >
-                  {char}
-                </span>
+                  <Typography
+                    variant="overline"
+                    component="p"
+                    sx={{
+                      fontSize: '1.1em',
+                      lineHeight: 'inherit',
+                      textAlign: 'center',
+                    }}
+                  >
+                    {group.firstSeq.split('').map((char, charIndex) => (
+                      <span
+                        key={`seq1-${groupIndex}-${charIndex}`}
+                        style={{
+                          backgroundColor: AminoAcidColors[char as Acid],
+                          fontSize: 'inherit',
+                          letterSpacing: 'inherit',
+                          lineHeight: 'inherit',
+                        }}
+                      >
+                        {char}
+                      </span>
+                    ))}
+                  </Typography>
+                  <Typography
+                    variant="overline"
+                    component="p"
+                    sx={{
+                      fontSize: '1.1em',
+                      lineHeight: 'inherit',
+                      textAlign: 'center',
+                    }}
+                  >
+                    {group.secondSeq.split('').map((char, charIndex) => (
+                      <Typography
+                        component="span"
+                        key={`seq2-${groupIndex}-${charIndex}`}
+                        sx={{
+                          backgroundColor:
+                            group.firstSeq[charIndex] === char
+                              ? 'transparent'
+                              : AminoAcidColors[char as Acid],
+                          fontSize: 'inherit',
+                          letterSpacing: 'inherit',
+                          lineHeight: 'inherit',
+                        }}
+                      >
+                        {char}
+                      </Typography>
+                    ))}
+                  </Typography>
+                </Box>
               ))}
-            </Typography>
-            <Typography
-              variant="overline"
-              component="p"
-              sx={{
-                fontSize: '1.1em',
-                lineHeight: 'inherit',
-                textAlign: 'center',
-              }}
-            >
-              {group.secondSeq.split('').map((char, charIndex) => (
-                <Typography
-                  component="span"
-                  key={`seq2-${groupIndex}-${charIndex}`}
-                  sx={{
-                    backgroundColor: compareSeqValues(
-                      group.firstSeq[charIndex],
-                      char
-                    ),
-                    fontSize: 'inherit',
-                    letterSpacing: 'inherit',
-                    lineHeight: 'inherit',
-                  }}
-                >
-                  {char}
-                </Typography>
-              ))}
-            </Typography>
-          </Box>
-        ))}
-      </Grid>
+            </Grid>
 
-      <Snackbar
-        open={isOpenSnackbar}
-        autoHideDuration={SELECTION_TIME}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      >
-        <Alert severity="success">Text copied to clipboard!</Alert>
-      </Snackbar>
-    </Box>
+            <Snackbar
+              open={isOpenSnackbar}
+              autoHideDuration={SELECTION_TIME}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            >
+              <Alert severity="success">Text copied to clipboard!</Alert>
+            </Snackbar>
+          </Grid>
+        </Grid>
+      </Box>
+    </Container>
   );
 }
 
