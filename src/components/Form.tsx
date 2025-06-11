@@ -15,6 +15,7 @@ function Form({
     formState: { errors },
     watch,
     reset,
+    setValue,
   } = useForm<IFormInput>({
     defaultValues: {
       firstSeqValue: '',
@@ -45,6 +46,14 @@ function Form({
     );
   };
 
+  const handleInputChange = (value: string, fieldName: keyof IFormInput) => {
+    const uppercaseValue = value.toUpperCase();
+    setValue(fieldName, uppercaseValue, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+  };
+
   return (
     <Container sx={{ my: '10vh' }}>
       <Box component="form" onSubmit={handleSubmit(onSubmit)}>
@@ -54,6 +63,8 @@ function Form({
               {...register('firstSeqValue', {
                 required: 'This field is required',
                 validate: (value) => validatePattern(value) || true,
+                onChange: (e) =>
+                  handleInputChange(e.target.value, 'firstSeqValue'),
               })}
               id="firstSeqValue"
               label="First amino sequence"
@@ -73,6 +84,8 @@ function Form({
                   if (patternError !== true) return patternError;
                   return validateSameLength(value, firstSeqFieldValue) || true;
                 },
+                onChange: (e) =>
+                  handleInputChange(e.target.value, 'secondSeqValue'),
               })}
               id="secondSeqValue"
               label="Second amino sequence"
