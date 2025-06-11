@@ -1,4 +1,5 @@
 import { AppBar, Toolbar, Typography } from '@mui/material';
+import Logo from './Logo';
 
 function Header() {
   return (
@@ -21,16 +22,7 @@ function Header() {
               textDecoration: 'none',
             }}
           >
-            <img
-              src={'/logo.svg'}
-              alt="BLAST"
-              style={{
-                width: '100%',
-                maxWidth: '50px',
-                height: 'auto',
-                marginRight: '10px',
-              }}
-            />
+            <Logo maxWidth="50px" margin="0 10px 0 0" />
             <span>BLAST</span>
           </Typography>
         </Toolbar>

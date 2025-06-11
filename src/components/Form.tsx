@@ -3,6 +3,7 @@ import React from 'react';
 import { Box, Button, Container, Grid, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import type { IFormInput } from '../types';
+import Logo from './Logo';
 
 function Form({
   setSubmittedData,
@@ -55,7 +56,8 @@ function Form({
   };
 
   return (
-    <Container sx={{ my: '10vh' }}>
+    <Container sx={{ my: '5vh' }}>
+      <Logo maxWidth="100px" margin="0 auto 2vh auto" />
       <Box component="form" onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={2} sx={{ justifyContent: 'center' }}>
           <Grid size={{ xs: 12, md: 8 }}>
