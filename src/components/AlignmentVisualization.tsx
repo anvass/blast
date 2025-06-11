@@ -1,5 +1,14 @@
-import { Box, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
+import {
+  Alert,
+  Box,
+  Grid,
+  Snackbar,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import type { IFormInput } from '../types';
+import { useState } from 'react';
 
 interface IColorTable {
   [key: string]: string;
@@ -43,6 +52,7 @@ function AlignmentVisualization({
 }) {
   const theme = useTheme();
   const isMoreThanMdScreenSize = useMediaQuery(theme.breakpoints.up('md'));
+  const [isOpenSnackbar, setIsOpenSnackbar] = useState<boolean>(false);
 
   if (!submittedData?.firstSeqValue || !submittedData?.secondSeqValue) {
     return;
@@ -75,6 +85,25 @@ function AlignmentVisualization({
     });
   }
 
+  const SELECTION_TIME = 1_000;
+
+  const handleSelect = async () => {
+    const selection = window.getSelection();
+
+    if (!selection?.toString()) return;
+
+    try {
+      await navigator.clipboard.writeText(selection.toString());
+      setIsOpenSnackbar(true);
+
+      setTimeout(() => {
+        setIsOpenSnackbar(false);
+      }, SELECTION_TIME);
+    } catch (err) {
+      console.error('Error while copying:', err);
+    }
+  };
+
   return (
     <Box component="div" sx={{ m: '0 5vw', p: 2, border: '1px dashed grey' }}>
       <Grid
@@ -83,7 +112,9 @@ function AlignmentVisualization({
           fontSize: '1.1em',
           lineHeight: 'inherit',
           textAlign: 'center',
+          '::selection': { backgroundColor: '#FF0000', color: '#FFFFFF' },
         }}
+        onMouseUp={handleSelect}
       >
         {groupsOfChunksOfBothSequences.map((group, groupIndex) => (
           <Box component={'div'} key={`group-${groupIndex}`} sx={{ mb: '1vh' }}>
@@ -140,6 +171,14 @@ function AlignmentVisualization({
           </Box>
         ))}
       </Grid>
+
+      <Snackbar
+        open={isOpenSnackbar}
+        autoHideDuration={SELECTION_TIME}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert severity="success">Text copied to clipboard!</Alert>
+      </Snackbar>
     </Box>
   );
 }
