@@ -89,7 +89,7 @@ function AlignmentVisualization({
     try {
       await navigator.clipboard.writeText(selection.toString());
       setIsOpenSnackbar(true);
-
+      selection.empty();
       setTimeout(() => {
         setIsOpenSnackbar(false);
       }, SELECTION_TIME);
