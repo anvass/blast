@@ -80,35 +80,26 @@ function AlignmentVisualization({
       <Grid
         spacing={2}
         sx={{
-          display: 'block',
-          wordWrap: 'break-word',
           fontSize: '1.1em',
           lineHeight: 'inherit',
           textAlign: 'center',
         }}
       >
         {groupsOfChunksOfBothSequences.map((group, groupIndex) => (
-          <Box
-            component={'div'}
-            key={`group-${groupIndex}`}
-            data-test={`group-${groupIndex}`}
-          >
+          <Box component={'div'} key={`group-${groupIndex}`} sx={{ mb: '1vh' }}>
             <Typography
               variant="overline"
               component="p"
               sx={{
                 fontSize: '1.1em',
                 lineHeight: 'inherit',
-                display: 'grid',
-                gridTemplateColumns: `repeat(${groupSize}, 1fr)`,
                 textAlign: 'center',
               }}
             >
               {group.firstSeq.split('').map((char, charIndex) => (
-                <Typography
-                  component="span"
+                <span
                   key={`seq1-${groupIndex}-${charIndex}`}
-                  sx={{
+                  style={{
                     backgroundColor: colorTable[char],
                     fontSize: 'inherit',
                     letterSpacing: 'inherit',
@@ -116,7 +107,7 @@ function AlignmentVisualization({
                   }}
                 >
                   {char}
-                </Typography>
+                </span>
               ))}
             </Typography>
             <Typography
@@ -125,8 +116,6 @@ function AlignmentVisualization({
               sx={{
                 fontSize: '1.1em',
                 lineHeight: 'inherit',
-                display: 'grid',
-                gridTemplateColumns: `repeat(${groupSize}, 1fr)`,
                 textAlign: 'center',
               }}
             >
