@@ -4,6 +4,7 @@ import Header from './components/Header';
 import type { IFormInput } from './types';
 import { Divider } from '@mui/material';
 import AlignmentVisualization from './components/AlignmentVisualization';
+import Legend from './components/Legend';
 
 function App() {
   const [submittedData, setSubmittedData] = useState<IFormInput | null>(null);
@@ -14,6 +15,8 @@ function App() {
       <Form setSubmittedData={setSubmittedData} />
       <Divider sx={{ my: '5vh' }} />
       <AlignmentVisualization submittedData={submittedData} />
+      <Divider sx={{ my: '5vh' }} />
+      <Legend />
     </>
   );
 }

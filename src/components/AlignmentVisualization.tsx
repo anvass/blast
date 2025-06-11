@@ -47,7 +47,7 @@ function AlignmentVisualization({
                   textAlign: 'center',
                 }}
               >
-                No data
+                No data to visualize
               </Typography>
             </Grid>
           </Grid>
