@@ -26,6 +26,7 @@ function Form({
   });
 
   const firstSeqFieldValue = watch('firstSeqValue');
+  const secondSeqFieldValue = watch('secondSeqValue');
 
   const onSubmit = (data: IFormInput) => {
     console.log('Form data:', data);
@@ -54,6 +55,10 @@ function Form({
       shouldDirty: true,
     });
   };
+
+  const canVisualise =
+    firstSeqFieldValue.length === secondSeqFieldValue.length &&
+    firstSeqFieldValue.length !== 0;
 
   return (
     <Container sx={{ my: '5vh' }}>
@@ -104,6 +109,7 @@ function Form({
               variant="contained"
               fullWidth
               size="large"
+              disabled={!canVisualise}
             >
               Get visualization
             </Button>
