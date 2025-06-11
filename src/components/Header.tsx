@@ -1,11 +1,18 @@
-import { AppBar, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Typography } from '@mui/material';
 import Logo from './Logo';
 
 function Header() {
   return (
     <>
-      <AppBar position="static">
-        <Toolbar variant="dense" sx={{ py: 1 }}>
+      <AppBar
+        position="static"
+        sx={{ p: '1vh', boxShadow: 'none' }}
+        color="transparent"
+      >
+        <Box
+          component={'div'}
+          sx={{ display: 'flex', justifyContent: 'center' }}
+        >
           <Typography
             variant="h6"
             noWrap
@@ -14,18 +21,18 @@ function Header() {
             sx={{
               display: 'flex',
               alignItems: 'center',
-              mr: 2,
               fontFamily: 'monospace',
               fontWeight: 700,
+              fontSize: '2.4em',
               letterSpacing: '.3rem',
               color: 'inherit',
               textDecoration: 'none',
             }}
           >
-            <Logo maxWidth="50px" margin="0 10px 0 0" />
+            <Logo maxWidth="100px" margin="0 10px 0 0" />
             <span>BLAST</span>
           </Typography>
-        </Toolbar>
+        </Box>
       </AppBar>
     </>
   );
